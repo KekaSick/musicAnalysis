@@ -1,0 +1,31 @@
+2025-06-18 23:11:20,844 - INFO - Запуск скрипта извлечения признаков
+2025-06-18 23:11:20,851 - INFO - Загружено 1100 треков из CSV файла
+2025-06-18 23:11:20,856 - INFO - Уже обработано: 0 треков
+2025-06-18 23:11:20,856 - INFO - Требует обработки: 1100 треков
+2025-06-18 23:11:20,856 - INFO - 
+Начинаем извлечение признаков из 1100 треков...
+2025-06-18 23:11:20,869 - INFO - Обработка: 18 ~eighteen~ - Masaharu Fukuyama
+2025-06-18 23:11:20,869 - INFO - Обработка: Perfect Government - Frank Turner
+2025-06-18 23:11:20,869 - INFO - Обработка: You’re Beautiful - Acoustic - John Adams
+2025-06-18 23:11:20,869 - INFO - Обработка: Can't Go Back Now - The Weepies;Deb Talan;Steve Tannen
+2025-06-18 23:11:20,869 - INFO - Обработка: Remnants of What People Used to Be - Days N Daze
+2025-06-18 23:11:20,869 - INFO - Обработка: A Drop In the Ocean - Ron Pope
+2025-06-18 23:11:20,869 - INFO - Обработка: The Nights - Acoustic - Caj Morgan
+2025-06-18 23:11:20,870 - INFO - Обработка: Let It Go - Colin & Caroline
+2025-06-18 23:11:20,870 - INFO - Обработка: Come on In - The Bridge City Sinners
+2025-06-18 23:11:20,870 - INFO - Обработка: No Air - Lúc
+2025-06-18 23:11:20,870 - INFO - Обработка: Amazing Grace - Takehara Pistol
+2025-06-18 23:11:20,870 - INFO - Обработка: Thinking out Loud - Boyce Avenue
+2025-06-18 23:11:20,870 - INFO - Обработка: So Far Away - Acoustic - Adam Christopher
+2025-06-18 23:11:20,871 - INFO - Обработка: No Ceiling - Eddie Vedder
+2025-06-18 23:11:20,871 - INFO - Обработка: Girls Like You - Acoustic Version - Jonah Baker
+2025-06-18 23:11:20,871 - INFO - Обработка: A Million Dreams - Acoustic - John Adams
+2025-06-18 23:11:20,871 - INFO - Обработка: HEY! - Masaharu Fukuyama
+2025-06-18 23:11:20,872 - INFO - Обработка: 93 Million Miles - Jason Mraz
+2025-06-18 23:11:20,875 - INFO - Обработка: Call Me - Gabrielle Aplin
+2025-06-18 23:11:20,877 - ERROR - Аудио файл не найден: Give Me Your Forever - Zack Tabudlo
+2025-06-18 23:11:20,877 - INFO - Обработка: Love Someone - Jason Mraz
+2025-06-18 23:12:37,240 - INFO - Успешно обработан: No Ceiling - Eddie Vedder (время: 76.36с)
+2025-06-18 23:12:37,272 - INFO - Обработка: Don't Start Me To Talkin' - Sonny Boy Williamson II
+2025-06-18 23:14:31,043 - INFO - Успешно обработан: Can't Go Back Now - The Weepies;Deb Talan;Steve Tannen (время: 190.17с)
+2025-06-18 23:14:31,049 - INFO - Обработка: サンサーラ - Takehara Pistol
