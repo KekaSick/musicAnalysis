@@ -1,0 +1,32 @@
+cluster,algorithm,metric_type,track_id,track_name,artists,track_genre,distance_to_center
+0,kmeans,Amplitude,0P2HFqXUhqvdZ2bS8doDjR,Havana - Acoustic,Matt Johnson,acoustic,0.0186012216186823
+1,kmeans,Amplitude,1vEQw6OHRWpLdMGn8GSqS6,"The Nutcracker, Op. 71, TH.14: Overture",Royal Concertgebouw Orchestra;Antal Doráti,classical,0.013316580081543246
+2,kmeans,Amplitude,1DIXPcTDzTj8ZMHt3PDt8p,Gangsta's Paradise,Coolio;L.V.,hip-hop,0.020087593785724896
+3,kmeans,Amplitude,23LveHXJT1mbjaxaqeWB5Y,"8 Menuette, K.315a: Menuetto 5 in F Major",Wolfgang Amadeus Mozart;Francesco Piemontesi,classical,0.06422649543824327
+0,hdbscan,Amplitude,1TmBaKkDUu0akM9xzSxRia,Bag of Grins,Red Hot Chili Peppers,metal,0.009336408165056532
+1,hdbscan,Amplitude,4dhMxlB0xQXYafSN13NPft,Patria al Hombro,Almafuerte,metal,0.013725308695588176
+2,hdbscan,Amplitude,3eW14mA7NcMwILMFXiSiLj,Time (Clock Of The Heart),Culture Club,disco,0.020309476894406233
+3,hdbscan,Amplitude,4sfnRgE0fJtQr09a8cU17H,"Moscato, Pizza y Fainá",Memphis La Blusera,blues,0.02642961728582145
+4,hdbscan,Amplitude,1GQMpacZAFmsYYmkT87gUw,Rough Boy,ZZ Top,blues,0.008676994500325927
+5,hdbscan,Amplitude,33es3TwcRecbr3mJrEc8nw,Rising,Phlocalyst;Hoogway;Akīn,jazz,0.0015876244431828176
+0,kmeans,Flux,5WSsTyBvMEFG3ac6JKb9gY,Wind of Change,Scorpions,metal,0.06457289640066742
+1,kmeans,Flux,4kDyGiTGv3QznWbovgJHyn,Manase Manihaarame,Yuvan Shankar Raja;Ranjith Govind;Pavithra Chari,pop,0.045191783993421726
+2,kmeans,Flux,0EZ3k6NTvkH1sQddEK4slm,Go Karo,KAROL G,reggae,0.024732396463325174
+3,kmeans,Flux,0eS2jQVzLptiDcHEV1N9wC,"Christmas Oratorio, BWV 248 / Part Two - For The Second Day Of Christmas: No. 10 Sinfonia",Johann Sebastian Bach;English Baroque Soloists;John Eliot Gardiner,classical,0.059114155647594965
+0,hdbscan,Flux,46QazXxQS0B31CnbRCy8CV,Rock You Like a Hurricane - 2011,Scorpions,metal,0.0391531820343216
+1,hdbscan,Flux,21ox43RiEnhW9T398iSgAN,Christmas Eve,Justin Bieber,pop,0.024173516507429302
+2,hdbscan,Flux,68Q6c22JNyLUlZYX4dE2tn,Heartbeat,Claptone;Nathan Nicholson,disco,0.024112208885504333
+3,hdbscan,Flux,4IUGuoJ41g5fLIqsO1MJoU,"Ilamai Thirumbudhe - From ""Petta""",Anirudh Ravichander,hip-hop,0.017895545630536348
+0,kmeans,Harmony,7AHF3V7qRPhZV7gzJLZ3CL,These Foolish Things - Remastered 1995,Lester Young,jazz,0.004998277507119984
+1,kmeans,Harmony,6wwT3PgG3eFuKCpxzjMJFs,Rotate,Becky G;Burna Boy,reggae,0.01354004201783812
+2,kmeans,Harmony,70HFIHUgLlQTDIU17WKeEQ,"Piano Sonata No. 16 in C Major, K. 545 ""Sonata facile"": II. Andante",Wolfgang Amadeus Mozart;Mao Fujita,classical,0.04081481701977501
+3,kmeans,Harmony,4tYFy8ALRjIZvnvSLw5lxN,Party,Bad Bunny;Rauw Alejandro,reggae,0.04780647210780302
+0,hdbscan,Harmony,2bbBBFlA66OVmzX9BMD9Dh,Man! I Feel Like A Woman!,Shania Twain,country,0.022457476019769645
+1,hdbscan,Harmony,1kdumEk4vjB6LTjtp59YdL,Bad Medicine,Bon Jovi,rock,0.014922014603656782
+2,hdbscan,Harmony,7qJtNgmUyzy3R86vJwk9Wp,Christmas Comes But Once A Year,Albert King,blues,0.011238846604149567
+0,kmeans,Spectral,2lvcDndxZGuowLA19g4YDv,Call Me,Gabrielle Aplin,acoustic,0.018600857290496483
+1,kmeans,Spectral,31MPMuJJoYfX91Myeqi8ob,"9 Variations on a Minuet by J.P. Duport in D, K.573: 8. Variation VII",Wolfgang Amadeus Mozart;Danielle Laval,classical,0.07223728258290402
+2,kmeans,Spectral,7IdC5YvSg9O1WfRSUtSpNt,Don't Start Me To Talkin',Sonny Boy Williamson II,acoustic,0.027773022247741103
+3,kmeans,Spectral,3EzO5J4BLoEElQzuAt0jyh,Rudolph The Red-Nosed Reindeer,Ella Fitzgerald,blues,0.05226144943571699
+0,hdbscan,Spectral,45s4AQmANhxHbIF9S0900V,"Carnaval, Op. 9: No. 15, Pantalon et Colombine (Live in Japan, 2022)",Robert Schumann;Pavel Nersessian,classical,0.037100231546843866
+1,hdbscan,Spectral,2V2mEnBBn4HsDRNxuVJvwP,Diamonds,Mone Kamishiraishi,acoustic,0.031294515352764694

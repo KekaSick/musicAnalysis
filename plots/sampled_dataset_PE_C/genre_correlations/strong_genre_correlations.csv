@@ -1,0 +1,4 @@
+metric,genre,correlation,p_value
+complexity_amplitude,metal,-0.4319929227699929,4.278111803843707e-51
+complexity_spectral,classical,-0.4786147698942844,6.932045304214696e-64
+entropy_spectral,classical,-0.6423419561735338,1.1583728109038445e-128
