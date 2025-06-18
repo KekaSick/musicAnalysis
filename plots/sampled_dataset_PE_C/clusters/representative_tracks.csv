@@ -2,7 +2,7 @@ cluster,algorithm,metric_type,track_id,track_name,artists,track_genre,distance_t
 0,kmeans,Amplitude,0P2HFqXUhqvdZ2bS8doDjR,Havana - Acoustic,Matt Johnson,acoustic,0.0186012216186823
 1,kmeans,Amplitude,1vEQw6OHRWpLdMGn8GSqS6,"The Nutcracker, Op. 71, TH.14: Overture",Royal Concertgebouw Orchestra;Antal Doráti,classical,0.013316580081543246
 2,kmeans,Amplitude,1DIXPcTDzTj8ZMHt3PDt8p,Gangsta's Paradise,Coolio;L.V.,hip-hop,0.020087593785724896
-3,kmeans,Amplitude,23LveHXJT1mbjaxaqeWB5Y,"8 Menuette, K.315a: Menuetto 5 in F Major",Wolfgang Amadeus Mozart;Francesco Piemontesi,classical,0.06422649543824327
+3,kmeans,Amplitude,23LveHXJT1mbjaxaqeWB5Y,"8 Menuette, K.315a: Menuetto 5 in F Major",Wolfgang Amadeus Mozart;Francesco Piemontesi,classical,0.06422649543824346
 0,hdbscan,Amplitude,1TmBaKkDUu0akM9xzSxRia,Bag of Grins,Red Hot Chili Peppers,metal,0.009336408165056532
 1,hdbscan,Amplitude,4dhMxlB0xQXYafSN13NPft,Patria al Hombro,Almafuerte,metal,0.013725308695588176
 2,hdbscan,Amplitude,3eW14mA7NcMwILMFXiSiLj,Time (Clock Of The Heart),Culture Club,disco,0.020309476894406233
@@ -17,9 +17,9 @@ cluster,algorithm,metric_type,track_id,track_name,artists,track_genre,distance_t
 1,hdbscan,Flux,21ox43RiEnhW9T398iSgAN,Christmas Eve,Justin Bieber,pop,0.024173516507429302
 2,hdbscan,Flux,68Q6c22JNyLUlZYX4dE2tn,Heartbeat,Claptone;Nathan Nicholson,disco,0.024112208885504333
 3,hdbscan,Flux,4IUGuoJ41g5fLIqsO1MJoU,"Ilamai Thirumbudhe - From ""Petta""",Anirudh Ravichander,hip-hop,0.017895545630536348
-0,kmeans,Harmony,7AHF3V7qRPhZV7gzJLZ3CL,These Foolish Things - Remastered 1995,Lester Young,jazz,0.004998277507119984
-1,kmeans,Harmony,6wwT3PgG3eFuKCpxzjMJFs,Rotate,Becky G;Burna Boy,reggae,0.01354004201783812
-2,kmeans,Harmony,70HFIHUgLlQTDIU17WKeEQ,"Piano Sonata No. 16 in C Major, K. 545 ""Sonata facile"": II. Andante",Wolfgang Amadeus Mozart;Mao Fujita,classical,0.04081481701977501
+0,kmeans,Harmony,7AHF3V7qRPhZV7gzJLZ3CL,These Foolish Things - Remastered 1995,Lester Young,jazz,0.004998277507120027
+1,kmeans,Harmony,6wwT3PgG3eFuKCpxzjMJFs,Rotate,Becky G;Burna Boy,reggae,0.013540042017838148
+2,kmeans,Harmony,70HFIHUgLlQTDIU17WKeEQ,"Piano Sonata No. 16 in C Major, K. 545 ""Sonata facile"": II. Andante",Wolfgang Amadeus Mozart;Mao Fujita,classical,0.04081481701977502
 3,kmeans,Harmony,4tYFy8ALRjIZvnvSLw5lxN,Party,Bad Bunny;Rauw Alejandro,reggae,0.04780647210780302
 0,hdbscan,Harmony,2bbBBFlA66OVmzX9BMD9Dh,Man! I Feel Like A Woman!,Shania Twain,country,0.022457476019769645
 1,hdbscan,Harmony,1kdumEk4vjB6LTjtp59YdL,Bad Medicine,Bon Jovi,rock,0.014922014603656782

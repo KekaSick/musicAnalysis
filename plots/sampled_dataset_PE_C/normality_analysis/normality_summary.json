@@ -1,0 +1,24 @@
+{
+  "strong_correlations": {
+    "entropy_amplitude vs complexity_amplitude (corr: -0.930)": {
+      "is_bivariate_normal": false,
+      "recommendation": "Данные НЕ подходят для корреляции Пирсона"
+    },
+    "entropy_harmony vs complexity_harmony (corr: -0.878)": {
+      "is_bivariate_normal": false,
+      "recommendation": "Данные НЕ подходят для корреляции Пирсона"
+    },
+    "entropy_flux vs complexity_flux (corr: -0.817)": {
+      "is_bivariate_normal": false,
+      "recommendation": "Данные НЕ подходят для корреляции Пирсона"
+    },
+    "energy vs loudness (corr: 0.810)": {
+      "is_bivariate_normal": false,
+      "recommendation": "Данные НЕ подходят для корреляции Пирсона"
+    },
+    "energy vs acousticness (corr: -0.800)": {
+      "is_bivariate_normal": false,
+      "recommendation": "Данные НЕ подходят для корреляции Пирсона"
+    }
+  }
+}

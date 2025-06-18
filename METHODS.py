@@ -17,7 +17,6 @@ import librosa
 import antropy as ent
 
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -98,7 +97,7 @@ def ordpy_flux(file_path, dim_size=6, hop_size=2,
     mag = np.abs(Z)                         # shape (n_bins, n_frames)
     if mag.shape[1] < 2:
         return np.nan, np.nan
-      # ── FLUX ──────────────────────────────────────────────────────────
+    # ── FLUX ──────────────────────────────────────────────────────────
     # 1) лог-магнитуда смягчает пики
     mag_log = np.log1p(np.abs(Z))
     diff    = np.diff(mag_log, axis=1)
@@ -156,7 +155,7 @@ def ordpy_harmony(file_path,
     else:
         hop_len = hop_len or 1024
 
-    # ── CQT + хрома (как в предыдущем коде) ──
+    # ── CQT + хрома ──
     if fmin is None:
         fmin = librosa.note_to_hz('C1')
     n_bins = bins_per_octave * n_octaves
@@ -742,17 +741,18 @@ def compute_folder_higuchi_fd(folder_path, k_max=200):
 # plot_graph_ordpy(folder_path, dim=dim, hop=hop, method="specentropy")
 
 
-fd1 = compute_folder_higuchi_fd("data/genres_30sec/blues", k_max=200)
-print(*fd1)
+# fd1 = compute_folder_higuchi_fd("data/genres_30sec/blues", k_max=200)
+# print(*fd1)
 
 
-# Пример использования новой функции
-folder_path = "data/top50musicSpotify/classical"
-fd2 = compute_box_counting_fd_folder(
-    folder_path=folder_path,
-    n_fft=2048,
-    hop_length=512,
-    n_mels=128,
-    threshold_method="median"
-)
-print(*fd2)
+# # Пример использования новой функции
+# folder_path = "data/scales/aeolian/A-1-aeolian-0.wav"
+# fd2 = compute_box_counting_fd_folder(
+#     folder_path=folder_path,
+#     n_fft=2048,
+#     hop_length=512,
+#     n_mels=128,
+#     threshold_method="median"
+# )
+d = compute_box_counting_fd("data/chords/aug/A-1-aug-chord-0.wav")
+print(d)
