@@ -71,7 +71,7 @@ def plot_entropy_correlations(df, entropy_cols):
                 center=0,
                 vmin=-1, vmax=1)
     
-    plt.title('Correlations between entropy measures, complexity and fractal dimensions')
+    plt.title('Pearson correlations between entropy measures, complexity and fractal dimensions')
     plt.tight_layout()
     plt.savefig('plots/sampled_dataset_PE_C/entropy_correlations.png', dpi=300, bbox_inches='tight')
     plt.close()
@@ -105,13 +105,13 @@ def plot_numerical_correlations(df, entropy_cols):
     
     plt.xticks(rotation=45, ha='right')
     
-    plt.title('Correlations between entropy measures, complexity, fractal dimensions and numerical parameters')
+    plt.title('Pearson correlations between entropy measures, complexity, fractal dimensions and numerical parameters')
     plt.tight_layout()
     plt.savefig('plots/sampled_dataset_PE_C/numerical_correlations.png', dpi=300, bbox_inches='tight')
     plt.close()
 
 def plot_genre_correlations(df, entropy_cols):
-    """Create heatmap of correlations between entropies and genres"""
+    """Create heatmap of Pearson correlations between entropies and genres"""
     genres_dummies = pd.get_dummies(df['track_genre'], prefix='genre').astype(float)
     
     all_metrics = entropy_cols + FRACTAL_COLS
@@ -138,7 +138,7 @@ def plot_genre_correlations(df, entropy_cols):
     
     plt.xticks(rotation=45, ha='right')
     
-    plt.title('Correlations between entropy measures, complexity, fractal dimensions and genres')
+    plt.title('Pearson correlations between entropy measures, complexity, fractal dimensions and genres')
     plt.tight_layout()
     plt.savefig('plots/sampled_dataset_PE_C/genre_correlations.png', dpi=300, bbox_inches='tight')
     plt.close()
@@ -1709,11 +1709,136 @@ def analyze_correlations():
     for metric in FRACTAL_COLS:
         plot_most_correlated_scatter(df, metric, 'plots/sampled_dataset_PE_C/most_correlated')
     
+    print("Creating genre scatter plots...")
+    plot_genre_scatter_plots(df)
+    
     print("Done! Plots saved in 'plots/sampled_dataset_PE_C' directory")
     
     # Add normality analysis
     analyze_normality_checks(df)
 
+def plot_genre_scatter_plots(df):
+    """Построение scatter plots по жанрам для каждой метрики энтропии, сложности и фрактальной размерности"""
+    # Создаем директорию для сохранения графиков
+    output_dir = 'plots/sampled_dataset_PE_C/genre_scatter_plots'
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Получаем уникальные жанры
+    genres = sorted(df['track_genre'].unique())
+    
+    # Все метрики для анализа
+    all_metrics = ENTROPY_COLS + FRACTAL_COLS
+    
+    # Создаем цветовую палитру для жанров
+    colors = plt.cm.tab20(np.linspace(0, 1, len(genres)))
+    color_dict = dict(zip(genres, colors))
+    
+    # Для каждой метрики создаем отдельный график
+    for metric in all_metrics:
+        plt.figure(figsize=(15, 10))
+        
+        # Создаем подграфики для каждого жанра
+        n_genres = len(genres)
+        n_cols = 4  # Количество колонок в сетке
+        n_rows = (n_genres + n_cols - 1) // n_cols  # Округление вверх
+        
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=(20, 5*n_rows))
+        fig.suptitle(f'{metric.replace("_", " ").title()} by Genre', fontsize=16, y=1.02)
+        
+        # Сглаживаем массив осей для удобства
+        axes_flat = axes.flatten() if n_rows > 1 else [axes] if n_cols == 1 else axes
+        
+        # Строим график для каждого жанра
+        for ax, genre in zip(axes_flat, genres):
+            # Получаем данные для текущего жанра
+            genre_data = df[df['track_genre'] == genre]
+            
+            if len(genre_data) == 0:
+                ax.text(0.5, 0.5, 'No data', ha='center', va='center', transform=ax.transAxes)
+                ax.set_title(genre)
+                continue
+            
+            # Получаем числовые колонки для корреляции (исключаем метрики и id)
+            numerical_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+            numerical_cols = [col for col in numerical_cols 
+                             if col not in all_metrics and 'id' not in col.lower()]
+            
+            # Находим самую коррелированную числовую характеристику
+            best_corr = 0
+            best_feature = None
+            best_p_value = 1
+            
+            for feature in numerical_cols:
+                mask = ~(np.isnan(genre_data[feature]) | np.isnan(genre_data[metric]))
+                if mask.sum() < 3:  # Минимум 3 точки для корреляции
+                    continue
+                
+                corr, p_val = stats.pearsonr(genre_data[feature][mask], genre_data[metric][mask])
+                
+                if abs(corr) > abs(best_corr):
+                    best_corr = corr
+                    best_feature = feature
+                    best_p_value = p_val
+            
+            if best_feature is None:
+                ax.text(0.5, 0.5, 'No correlation data', ha='center', va='center', transform=ax.transAxes)
+                ax.set_title(genre)
+                continue
+            
+            # Строим scatter plot
+            x_data = genre_data[best_feature]
+            y_data = genre_data[metric]
+            mask = ~(np.isnan(x_data) | np.isnan(y_data))
+            
+            ax.scatter(x_data[mask], y_data[mask], 
+                      c=[color_dict[genre]], alpha=0.6, s=30)
+            
+            # Добавляем линию регрессии
+            if mask.sum() >= 2:
+                z = np.polyfit(x_data[mask], y_data[mask], 1)
+                p = np.poly1d(z)
+                x_range = np.linspace(x_data[mask].min(), x_data[mask].max(), 100)
+                ax.plot(x_range, p(x_range), "r--", alpha=0.8, linewidth=2)
+            
+            # Настраиваем заголовок и метки осей
+            feature_title = best_feature.replace('_', ' ').title()
+            metric_title = metric.replace('_', ' ').title()
+            ax.set_title(f'{genre}\n{feature_title} vs {metric_title}')
+            ax.set_xlabel(feature_title)
+            ax.set_ylabel(metric_title)
+            
+            # Добавляем информацию о корреляции и p-value
+            if best_p_value < 0.001:
+                p_text = "p < 0.001"
+            else:
+                p_text = f"p = {best_p_value:.3f}"
+            
+            ax.text(0.05, 0.95, f'Correlation: {best_corr:.3f}\n{p_text}', 
+                   transform=ax.transAxes, 
+                   verticalalignment='top',
+                   bbox=dict(facecolor='white', alpha=0.8))
+            
+            # Добавляем статистическую информацию
+            stats_text = (
+                f'n = {len(genre_data)}\n'
+                f'Mean: {genre_data[metric].mean():.3f}\n'
+                f'Std: {genre_data[metric].std():.3f}'
+            )
+            
+            ax.text(0.95, 0.05, stats_text,
+                   transform=ax.transAxes,
+                   verticalalignment='bottom',
+                   horizontalalignment='right',
+                   bbox=dict(facecolor='white', alpha=0.8))
+        
+        # Скрываем пустые подграфики
+        for ax in axes_flat[len(genres):]:
+            ax.set_visible(False)
+        
+        plt.tight_layout()
+        plt.savefig(os.path.join(output_dir, f'genre_scatter_{metric}.png'),
+                   dpi=300, bbox_inches='tight')
+        plt.close()
 
 if __name__ == "__main__":
     analyze_correlations() 

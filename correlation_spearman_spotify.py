@@ -78,7 +78,7 @@ def plot_entropy_correlations(df, entropy_cols):
                 center=0,
                 vmin=-1, vmax=1)
     
-    plt.title('Correlations between entropy measures, complexity and fractal dimensions')
+    plt.title('Spearman correlations between entropy measures, complexity and fractal dimensions')
     plt.tight_layout()
     plt.savefig('plots/spearman/entropy_correlations.png', dpi=300, bbox_inches='tight')
     plt.close()
@@ -119,7 +119,7 @@ def plot_numerical_correlations(df, entropy_cols):
     # Поворачиваем метки на оси X для лучшей читаемости
     plt.xticks(rotation=45, ha='right')
     
-    plt.title('Correlations between entropy measures, complexity, fractal dimensions and numerical parameters')
+    plt.title('Spearman correlations between entropy measures, complexity, fractal dimensions and numerical parameters')
     plt.tight_layout()
     plt.savefig('plots/spearman/numerical_correlations.png', dpi=300, bbox_inches='tight')
     plt.close()
@@ -160,7 +160,7 @@ def plot_genre_correlations(df, entropy_cols):
     # Поворачиваем метки на оси X для лучшей читаемости
     plt.xticks(rotation=45, ha='right')
     
-    plt.title('Correlations between entropy measures, complexity, fractal dimensions and genres')
+    plt.title('Spearman correlations between entropy measures, complexity, fractal dimensions and genres')
     plt.tight_layout()
     plt.savefig('plots/spearman/genre_correlations.png', dpi=300, bbox_inches='tight')
     plt.close()
