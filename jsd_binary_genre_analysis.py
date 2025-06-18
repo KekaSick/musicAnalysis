@@ -47,8 +47,10 @@ def compute_jsd(p, q):
     p = p / p.sum()
     q = q / q.sum()
     
-    # Use scipy's built-in jensenshannon function
-    return jensenshannon(p, q, base=2)
+    # Use scipy's built-in jensenshannon function and square the result
+    # since scipy returns sqrt(JSD), not JSD itself
+    dist = jensenshannon(p, q, base=2)
+    return dist**2
 
 
 def analyze_jsd_by_genre(df, metrics, genre_column=GENRE_COL, n_bins=30, plot_histograms=True):
@@ -65,12 +67,12 @@ def analyze_jsd_by_genre(df, metrics, genre_column=GENRE_COL, n_bins=30, plot_hi
         for genre in genres:
             group1 = metric_data[metric_data[genre_column] == genre][metric]
             group2 = metric_data[metric_data[genre_column] != genre][metric]
-            # Compute histograms (probability distributions)
-            hist1, _ = np.histogram(group1, bins=bins, density=True)
-            hist2, _ = np.histogram(group2, bins=bins, density=True)
-            # Normalize to sum to 1
-            p = hist1 / (hist1.sum() + 1e-12)
-            q = hist2 / (hist2.sum() + 1e-12)
+            # Compute histograms as raw counts (not density)
+            counts1, _ = np.histogram(group1, bins=bins, density=False)
+            counts2, _ = np.histogram(group2, bins=bins, density=False)
+            # Normalize to true probabilities
+            p = counts1 / counts1.sum()
+            q = counts2 / counts2.sum()
             jsd = compute_jsd(p, q)
             results.append({
                 'metric': metric,
@@ -111,7 +113,6 @@ def analyze_jsd_by_genre(df, metrics, genre_column=GENRE_COL, n_bins=30, plot_hi
         annot=True,
         fmt='.2f',
         cmap='coolwarm',
-        center=0,
         vmin=0, vmax=1
     )
     plt.title('Jensen-Shannon Divergence (JSD) Heatmap')
@@ -128,7 +129,7 @@ def main():
     df = pd.read_csv(DATASET_PATH)
     print("Performing JSD analysis for all metrics and genres...")
     analyze_jsd_by_genre(df, ALL_METRICS, plot_histograms=True)
-    print("Done! Plots and results saved in 'plots/binary/jsd'")
+    print("Done! Plots and results saved in 'plots/jsd'")
 
 
 if __name__ == "__main__":

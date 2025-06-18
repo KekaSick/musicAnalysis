@@ -183,7 +183,8 @@ def analyze_effect_sizes(df, metrics, genre_column='track_genre', mode_column='m
                 sns.histplot(data=pd.DataFrame({
                     'value': pd.concat([group1, group2]),
                     'group': ['Genre'] * len(group1) + ['Other'] * len(group2)
-                }), x='value', hue='group', bins=30, kde=True)
+                }), x='value', hue='group', bins=30, stat='density', kde=True, 
+                           common_norm=False, alpha=0.6)
                 
                 plt.axvline(np.mean(group1), color='blue', linestyle='dashed',
                            label=f'{genre} mean')
@@ -191,7 +192,7 @@ def analyze_effect_sizes(df, metrics, genre_column='track_genre', mode_column='m
                            label='Other genres mean')
                 
                 plt.xlabel(metric)
-                plt.ylabel('Density')
+                plt.ylabel('Probability Density')
                 plt.title(f'Distribution of {metric} for {genre} vs Other Genres\n'
                          f'{test_type}: p={p_value:.2e}, effect={effect_size:.2f}')
                 plt.legend()
@@ -254,7 +255,8 @@ def analyze_effect_sizes(df, metrics, genre_column='track_genre', mode_column='m
                 sns.histplot(data=pd.DataFrame({
                     'value': pd.concat([group1, group2]),
                     'group': ['Mode'] * len(group1) + ['Other'] * len(group2)
-                }), x='value', hue='group', bins=30, kde=True)
+                }), x='value', hue='group', bins=30, stat='density', kde=True, 
+                           common_norm=False, alpha=0.6)
                 
                 plt.axvline(np.mean(group1), color='blue', linestyle='dashed',
                            label=f'Mode {mode} mean')
@@ -262,7 +264,7 @@ def analyze_effect_sizes(df, metrics, genre_column='track_genre', mode_column='m
                            label='Other modes mean')
                 
                 plt.xlabel(metric)
-                plt.ylabel('Density')
+                plt.ylabel('Probability Density')
                 plt.title(f'Distribution of {metric} for Mode {mode} vs Other Modes\n'
                          f'{test_type}: p={p_value:.2e}, effect={effect_size:.2f}')
                 plt.legend()
@@ -300,7 +302,7 @@ def analyze_effect_sizes(df, metrics, genre_column='track_genre', mode_column='m
             pivot_table_p = overall_genre_results.pivot(index='comparison_value', columns='metric', values='p_adj').reindex(columns=metrics)
             if not pivot_table_p.empty:
                 pivot_table_p = -np.log10(pivot_table_p)
-                sns.heatmap(pivot_table_p, annot=True, cmap='YlOrRd', vmin=0)
+                sns.heatmap(pivot_table_p.T, annot=True, cmap='YlOrRd', vmin=0)
                 plt.title(f'-log10(adjusted p-value) Heatmap - All Metrics vs Genres ({test_type})')
                 plt.tight_layout()
                 plt.savefig(os.path.join(overall_heatmaps_dir, 'pvalue_heatmap_all_genres.png'), dpi=300, bbox_inches='tight')
@@ -310,7 +312,7 @@ def analyze_effect_sizes(df, metrics, genre_column='track_genre', mode_column='m
             plt.figure(figsize=(15, 10))
             pivot_table_e = overall_genre_results.pivot(index='comparison_value', columns='metric', values='effect_size').reindex(columns=metrics)
             if not pivot_table_e.empty:
-                sns.heatmap(pivot_table_e, annot=True, cmap='coolwarm', center=0)
+                sns.heatmap(pivot_table_e.T, annot=True, cmap='coolwarm', center=0)
                 plt.title(f"Effect Size Heatmap - All Metrics vs Genres ({test_type})")
                 plt.tight_layout()
                 plt.savefig(os.path.join(overall_heatmaps_dir, 'effect_size_heatmap_all_genres.png'), dpi=300, bbox_inches='tight')
@@ -324,7 +326,7 @@ def analyze_effect_sizes(df, metrics, genre_column='track_genre', mode_column='m
             pivot_table_p = overall_mode_results.pivot(index='comparison_value', columns='metric', values='p_adj').reindex(columns=metrics)
             if not pivot_table_p.empty:
                 pivot_table_p = -np.log10(pivot_table_p)
-                sns.heatmap(pivot_table_p, annot=True, cmap='YlOrRd', vmin=0)
+                sns.heatmap(pivot_table_p.T, annot=True, cmap='YlOrRd', vmin=0)
                 plt.title(f'-log10(adjusted p-value) Heatmap - All Metrics vs Modes ({test_type})')
                 plt.tight_layout()
                 plt.savefig(os.path.join(overall_heatmaps_dir, 'pvalue_heatmap_all_modes.png'), dpi=300, bbox_inches='tight')
@@ -334,7 +336,7 @@ def analyze_effect_sizes(df, metrics, genre_column='track_genre', mode_column='m
             plt.figure(figsize=(15, 10))
             pivot_table_e = overall_mode_results.pivot(index='comparison_value', columns='metric', values='effect_size').reindex(columns=metrics)
             if not pivot_table_e.empty:
-                sns.heatmap(pivot_table_e, annot=True, cmap='coolwarm', center=0)
+                sns.heatmap(pivot_table_e.T, annot=True, cmap='coolwarm', center=0)
                 plt.title(f"Effect Size Heatmap - All Metrics vs Modes ({test_type})")
                 plt.tight_layout()
                 plt.savefig(os.path.join(overall_heatmaps_dir, 'effect_size_heatmap_all_modes.png'), dpi=300, bbox_inches='tight')
