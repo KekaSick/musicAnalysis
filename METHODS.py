@@ -1,4 +1,3 @@
-# ─────────────────────────── imports ───────────────────────────
 import os, logging
 import numpy as np
 from scipy.io import wavfile
@@ -20,7 +19,6 @@ import antropy as ent
 logger = logging.getLogger(__name__)
 
 
-# ──────────────────────── 1. Audio Loader ──────────────────────
 def _load_mono_audio(file_path):
     """
     Считываем WAV (scipy) или любой другой формат (soundfile/librosa backend)
@@ -45,7 +43,6 @@ def _load_mono_audio(file_path):
     return data, sr
 
 
-# ───────────────────────── helpers ────────────────────────────
 def _frame_signal(x, frame_len, hop_len):
     """np.lib.stride_tricks.sliding_window_view wrapper → shape (n_frames, frame_len)"""
     if len(x) < frame_len:
@@ -62,7 +59,6 @@ def _ordpy_pe_ce(ts, dim, tau):
     return H, C
 
 
-# ═══════════════════ 2. Амплитудный хаос ═══════════════════════
 def ordpy_amplitude(file_path, dim_size=6, hop_size=2,
                     win_len=2048, hop_len=1024):
     """Hilbert envelope → окно-среднее → PE-CE."""
@@ -83,7 +79,6 @@ def ordpy_amplitude(file_path, dim_size=6, hop_size=2,
     return _ordpy_pe_ce(env_norm, dim_size, hop_size)
 
 
-# ═══════════════════ 3. Тембровый флюкс ════════════════════════
 def ordpy_flux(file_path, dim_size=6, hop_size=2,
                n_fft=2048, hop_len=512, smooth=7):
     """
@@ -97,7 +92,7 @@ def ordpy_flux(file_path, dim_size=6, hop_size=2,
     mag = np.abs(Z)                         # shape (n_bins, n_frames)
     if mag.shape[1] < 2:
         return np.nan, np.nan
-    # ── FLUX ──────────────────────────────────────────────────────────
+    # FLUX 
     # 1) лог-магнитуда смягчает пики
     mag_log = np.log1p(np.abs(Z))
     diff    = np.diff(mag_log, axis=1)
@@ -111,7 +106,7 @@ def ordpy_flux(file_path, dim_size=6, hop_size=2,
     return _ordpy_pe_ce(flux, dim_size, hop_size)
 
 
-# ═══════════════ 4. Гармонический хаос (CQT-хрома) ════════════════
+
 def ordpy_harmony(file_path,
                   dim_size: int = 6,
                   hop_size: int = 1,
@@ -143,10 +138,9 @@ def ordpy_harmony(file_path,
     if hop_len is None:
         hop_len = 1024
 
-    # ── LOAD ──
     x, sr = _load_mono_audio(file_path)
 
-    # ── TEMPO-АВТО ──
+    # TEMPO-АUТО
     if use_auto_tempo:
         tempo, _ = librosa.beat.beat_track(y=x, sr=sr)
         quarter_sec = 60.0 / tempo[0] if isinstance(tempo, np.ndarray) else 60.0 / tempo # Ensure tempo is scalar
@@ -155,7 +149,7 @@ def ordpy_harmony(file_path,
     else:
         hop_len = hop_len or 1024
 
-    # ── CQT + хрома ──
+    # CQT + хрома
     if fmin is None:
         fmin = librosa.note_to_hz('C1')
     n_bins = bins_per_octave * n_octaves
@@ -173,7 +167,7 @@ def ordpy_harmony(file_path,
     return _ordpy_pe_ce(phi, dim_size, hop_size)
 
 
-# ═════════════════ 5. «Энтропия энтропии» (SE ➜ PE) ═══════════
+# «Энтропия энтропии» (SE ➜ PE)   
 def ordpy_specentropy(file_path,
                       dim_size: int = 6,
                       hop_size: int = 1,
@@ -191,62 +185,32 @@ def ordpy_specentropy(file_path,
     """
    # Параметры для фреймирования аудио и STFT (в случае фоллбэка)
 
-    # ── загрузка ────────────────────────────────────────────────────
+    # загрузка 
     ext = os.path.splitext(file_path)[1].lower()
     data, sr = _load_mono_audio(file_path)
 
     spectral_entropy_ts = None
 
-    try:
-        # ── СПЕКТРАЛЬНАЯ ЭНТРОПИЯ (antropy, основной метод) ───────────
-        # Расчет на фреймах сырого аудиосигнала
-        logger.debug(f"Attempting antropy.spectral_entropy (on raw audio frames) for {file_path}")
-        
-        # 1. Фреймирование сырого аудио
-        # axis=0 для формата (длина_фрейма, количество_фреймов)
-        audio_frames = librosa.util.frame(data, frame_length=N_FFT, hop_length=HOP_LENGTH_STFT, axis=0)
-        
-        # 2. Применение antropy.spectral_entropy к каждому аудио-фрейму
-        spectral_entropy_ts = np.apply_along_axis(
-            lambda audio_segment: ent.spectral_entropy(
-                audio_segment, 
-                sf=sr, 
-                method="fft", 
-                normalize=True  # Как в вашем коде, результат 0-1
-            ) if np.any(audio_segment) else 0.0, # Обработка тихих фреймов
-            axis=0, # Применить к каждому столбцу (аудио-фрейму)
-            arr=audio_frames
-        )
-        logger.info(f"Successfully used antropy.spectral_entropy (on raw audio frames) for {file_path}")
-
-    except (AttributeError, NameError, ImportError, ValueError) as e_antropy:
-        logger.warning(
-            f"antropy.spectral_entropy (on raw audio frames) failed for {file_path} ({type(e_antropy).__name__}: {e_antropy}). "
-            "Falling back to manual spectral entropy calculation using librosa.stft."
-        )
-        # ── СПЕКТРАЛЬНАЯ ЭНТРОПИЯ (ручной STFT-based, фоллбэк) ──────
-        # 1. STFT и магнитудный спектр
-        S_complex = librosa.stft(data, n_fft=N_FFT, hop_length=HOP_LENGTH_STFT)
-        S_mag = np.abs(S_complex)**2 # Магнитудный спектр
-        
-        # 2. Нормализация и расчет энтропии Шеннона для каждого фрейма S_mag
-        epsilon = np.finfo(S_mag.dtype).eps if S_mag.dtype in [np.float32, np.float64] else np.finfo(float).eps
-        prob_dist = S_mag / (np.sum(S_mag, axis=0, keepdims=True) + epsilon)
-        prob_dist = np.nan_to_num(prob_dist, nan=0.0, posinf=0.0, neginf=0.0)
-        
-        # Энтропия Шеннона (в битах)
-        entropy_values_bits = -np.sum(prob_dist * np.log2(prob_dist + epsilon), axis=0)
-        
-        # Нормализация (0-1), если хотим соответствовать antropy c normalize=True
-        # np.log2(S_mag.shape[0]) это log2(количество_частотных_бинов)
-        # Добавляем epsilon в знаменатель для стабильности, если S_mag.shape[0] <= 1
-        num_freq_bins = S_mag.shape[0]
-        if num_freq_bins > 1:
-            spectral_entropy_ts = entropy_values_bits / (np.log2(num_freq_bins) + epsilon)
-        else: # Если всего 1 бин, энтропия должна быть 0 (после нормализации)
-            spectral_entropy_ts = np.zeros_like(entropy_values_bits)
-        
-        logger.info(f"Used manual STFT-based calculation for spectral entropy for {file_path}")
+    # СПЕКТРАЛЬНАЯ ЭНТРОПИЯ (antropy, основной метод) 
+    # Расчет на фреймах сырого аудиосигнала
+    logger.debug(f"Attempting antropy.spectral_entropy (on raw audio frames) for {file_path}")
+    
+    # 1. Фреймирование сырого аудио
+    # axis=0 для формата (длина_фрейма, количество_фреймов)
+    audio_frames = librosa.util.frame(data, frame_length=N_FFT, hop_length=HOP_LENGTH_STFT, axis=0)
+    
+    # 2. Применение antropy.spectral_entropy к каждому аудио-фрейму
+    spectral_entropy_ts = np.apply_along_axis(
+        lambda audio_segment: ent.spectral_entropy(
+            audio_segment, 
+            sf=sr, 
+            method="fft", 
+            normalize=True  # Как в вашем коде, результат 0-1
+        ) if np.any(audio_segment) else 0.0, # Обработка тихих фреймов
+        axis=0, # Применить к каждому столбцу (аудио-фрейму)
+        arr=audio_frames
+    )
+    logger.info(f"Successfully used antropy.spectral_entropy (on raw audio frames) for {file_path}")
 
     # Обработка NaN, если что-то пошло не так
     if spectral_entropy_ts is None:
@@ -267,7 +231,6 @@ def ordpy_specentropy(file_path,
     return _ordpy_pe_ce(spectral_entropy_ts, dim_size, hop_size)
 
 
-# ═════════════════ 8. Process Folder with selectable method ═══════════
 def ordpy_process_folder(folder_path, method_name, dim_size=6, hop_size=1):
     """
     Processes all audio files in a folder using the specified ordpy method.
@@ -324,12 +287,12 @@ def plot_graph_ordpy(folder_path, dim, hop, method, folder="plots"):
         "File": labels
     }).dropna()
 
-    # ── ordpy границы ──────────────────────────────────────────────
+    # ordpy границы 
     # Для границ всегда используем tau=1, так как hop в ordpy работает по-другому
     max_HC = ordpy.maximum_complexity_entropy(dim, 1)
     min_HC = ordpy.minimum_complexity_entropy(dim, 1)
 
-    # ── Matplotlib ─────────────────────────────────────────────────
+    # Matplotlib 
     plt.figure(figsize=(8, 6))
     if not df.empty:
         plt.scatter(df["Entropy"], df["Complexity"], s=70,
@@ -351,7 +314,7 @@ def plot_graph_ordpy(folder_path, dim, hop, method, folder="plots"):
     plt.savefig(out_png); plt.close()
     logger.info(f"Saved plot → {out_png}")
 
-    # ── Plotly ─────────────────────────────────────────────────────
+    # Plotly 
     fig = go.Figure()
     if not df.empty:
         fig.add_trace(go.Scatter(
