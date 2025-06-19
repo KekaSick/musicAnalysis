@@ -96,13 +96,6 @@ musicAnalysis/
 python genre_classification_model.py
 ```
 
-This will:
-- Load the pre-processed dataset
-- Perform stratified train-test split
-- Train multiple models with hyperparameter optimization
-- Generate classification reports and confusion matrices
-- Create feature importance visualizations
-
 ### Advanced Analysis
 
 ```python
